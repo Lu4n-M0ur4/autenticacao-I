@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { UserBusiness } from "../business/UserBusiness"
 import { GetUsersSchema } from "../dtos/getUsers.dto"
-import { ZodError } from "zod"
+import { ZodError, string } from "zod"
 import { BaseError } from "../errors/BaseError"
 import { LoginSchema } from "../dtos/login.dto"
 import { SignupSchema } from "../dtos/signup.dto"
@@ -14,8 +14,10 @@ export class UserController {
   public getUsers = async (req: Request, res: Response) => {
     try {
       const input = GetUsersSchema.parse({
-        q: req.query.q
+        q: req.query.q,
+        token:req.headers.authorization
       })
+      console.log(input.token)
 
       const output = await this.userBusiness.getUsers(input)
 

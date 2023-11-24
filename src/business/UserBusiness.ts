@@ -18,7 +18,13 @@ export class UserBusiness {
   public getUsers = async (
     input: GetUsersInputDTO
   ): Promise<GetUsersOutputDTO> => {
-    const { q } = input
+    const { q , token} = input
+
+    const payload = this.tokenManager.getPayload(token)
+
+    if (payload === null) {
+      throw new BadRequestError("token inválido")
+  }
 
     const usersDB = await this.userDatabase.findUsers(q)
 
